@@ -225,6 +225,14 @@
       overflow: hidden;
       display: block;
     }
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 12px;
+    }
+    .table-wrap table {
+      min-width: 980px;
+    }
 
     thead, tbody, tr {
       width: 100%;
@@ -316,6 +324,12 @@
       .kpis { grid-template-columns: repeat(2, minmax(135px, 1fr)); }
       table { font-size: 12px; }
     }
+    @media (max-width: 520px) {
+      .kpis { grid-template-columns: 1fr; }
+      .btn { padding: 7px 10px; font-size: 12px; }
+      .section-title { font-size: 13px; }
+      .table-wrap { margin: 0 -4px; }
+    }
   </style>
 </head>
 <body>
@@ -359,23 +373,26 @@
 
     <section class="card">
       <h2 class="section-title">Детализация по блюдам</h2>
-      <table>
-        <thead>
-          <tr>
-            <th style="width:16%">Блюдо</th>
-            <th style="width:10%">Роль</th>
-            <th style="width:8%">Порции</th>
-            <th style="width:11%">Выручка</th>
-            <th style="width:11%">Валовая прибыль</th>
-            <th style="width:8%">ABC/XYZ</th>
-            <th style="width:8%">R замещ.</th>
-            <th style="width:10%">Потеря маржи</th>
-            <th style="width:8%">Net</th>
-            <th style="width:10%">Решение</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
+      <div class="sub" style="margin-bottom:8px">На мобильных таблица скроллится по горизонтали.</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:16%">Блюдо</th>
+              <th style="width:10%">Роль</th>
+              <th style="width:8%">Порции</th>
+              <th style="width:11%">Выручка</th>
+              <th style="width:11%">Валовая прибыль</th>
+              <th style="width:8%">ABC/XYZ</th>
+              <th style="width:8%">R замещ.</th>
+              <th style="width:10%">Потеря маржи</th>
+              <th style="width:8%">Net</th>
+              <th style="width:10%">Решение</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
     </section>
 
     <div class="footer">Демо-макет: показатели рассчитаны на сгенерированных данных, без подключения к API.</div>
