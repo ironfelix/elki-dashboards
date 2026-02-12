@@ -205,6 +205,11 @@
       max-height: 220px;
       overflow: auto;
     }
+    .split-line {
+      border: 0;
+      border-top: 1px solid var(--line);
+      margin: 10px 0;
+    }
 
     .table-wrap {
       overflow-x: auto;
@@ -352,6 +357,12 @@
       </article>
 
       <article class="card">
+        <h2 class="section-title">Pareto 80/20 по выручке</h2>
+        <div class="sub" id="paretoSummary" style="margin-bottom:8px"></div>
+        <ul class="no-sales" id="paretoList"></ul>
+
+        <hr class="split-line" />
+
         <h2 class="section-title">Нет продаж в текущем периоде</h2>
         <ul class="no-sales" id="noSalesList"></ul>
       </article>
@@ -542,7 +553,22 @@
       const core = rows.filter(r => r.action === "keep").length;
       const rework = rows.filter(r => r.action === "rework").length;
       const remove = rows.filter(r => r.action === "remove").length;
-      const risk = rows.filter(r => r.abc_revenue === "C" && r.abc_profit === "C").length;
+      const revenueRows = rows
+        .filter(r => r.estRevenue !== null && r.estRevenue > 0)
+        .sort((a, b) => b.estRevenue - a.estRevenue);
+      const totalRevenue = revenueRows.reduce((s, r) => s + r.estRevenue, 0);
+      let cumulativeRevenue = 0;
+      const paretoRows = [];
+      for (const r of revenueRows) {
+        if (totalRevenue > 0 && cumulativeRevenue / totalRevenue >= 0.8) break;
+        cumulativeRevenue += r.estRevenue;
+        paretoRows.push({
+          ...r,
+          revShare: r.estRevenue / totalRevenue,
+          cumShare: cumulativeRevenue / totalRevenue
+        });
+      }
+      const paretoItemsShare = revenueRows.length ? paretoRows.length / revenueRows.length : 0;
 
       const hasNumbers = rows.some(r => r.foodcost !== null || r.cost_total !== null || r.estRevenue !== null);
       document.getElementById("dataCoverageNote").textContent = hasNumbers
@@ -557,7 +583,13 @@
         { n: "Защитить", v: fmtInt(core), f: "стабильное ядро" },
         { n: "Доработать", v: fmtInt(rework), f: "спрос есть, прибыль проседает" },
         { n: "Выводить", v: fmtInt(remove), f: "кандидаты на вывод" },
-        { n: "Зона риска C/C", v: fmtInt(risk), f: "выручка и прибыль в C" },
+        revenueRows.length
+          ? {
+              n: "Pareto 80%",
+              v: `${fmtInt(paretoRows.length)} поз.`,
+              f: `${(paretoItemsShare * 100).toFixed(1).replace(".", ",")}% ассортимента`
+            }
+          : { n: "Pareto 80%", v: "н/д", f: "нет числовой выручки" },
       ].map(k => `
         <article class="card">
           <div class="kpi-name">${k.n}</div>
@@ -582,6 +614,19 @@
       fillList("keepList", keepTop, r => `<li>${r.name} (${r.abc_revenue}/${r.abc_profit})</li>`);
       fillList("reworkList", reworkTop, r => `<li>${r.name} (${r.abc_revenue}/${r.abc_profit})</li>`);
       fillList("removeList", removeTop, r => `<li>${r.name} (${decisionLabel(r.action)})</li>`);
+
+      const paretoSummary = document.getElementById("paretoSummary");
+      const paretoList = document.getElementById("paretoList");
+      if (!revenueRows.length) {
+        paretoSummary.textContent = "Для этой точки/периода нет абсолютной выручки в выгрузке (только ABC-классы).";
+        paretoList.innerHTML = "<li>Для анализа Парето переключитесь на вкладки с фудкостом/себестоимостью: «Общий бар и кухня», «Бар общий», «Кухня общий», «Кухня Быстрецкая».</li>";
+      } else {
+        paretoSummary.textContent =
+          `${fmtInt(paretoRows.length)} из ${fmtInt(revenueRows.length)} позиций дают 80% выручки (${(paretoItemsShare * 100).toFixed(1).replace(".", ",")}%).`;
+        paretoList.innerHTML = paretoRows.slice(0, 30).map((r, idx) =>
+          `<li>${idx + 1}. ${r.name} — ${fmtMoney(r.estRevenue)} (доля ${(r.revShare * 100).toFixed(1).replace(".", ",")}%, накоп. ${(r.cumShare * 100).toFixed(1).replace(".", ",")}%)</li>`
+        ).join("");
+      }
 
       const ns = document.getElementById("noSalesList");
       if (!noSales.length) {
