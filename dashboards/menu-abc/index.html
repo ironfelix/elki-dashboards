@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ABC-анализ блюд (демо)</title>
+  <title>ABC-анализ iiko: управленческий отчет</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,14 +11,16 @@
     :root {
       --bg: #f3f3f1;
       --panel: #fbfbfa;
-      --ink: #141414;
-      --muted: #676767;
-      --line: #d8d8d5;
-      --line-strong: #b7b7b3;
-      --chip: #efefed;
-      --a: #1e1e1e;
-      --b: #555555;
-      --c: #9a9a97;
+      --ink: #171717;
+      --muted: #6a6a6a;
+      --line: #d9d9d6;
+      --line-strong: #b8b8b4;
+      --a: #1f1f1f;
+      --b: #555;
+      --c: #969693;
+      --ok: #2e2e2e;
+      --warn: #575757;
+      --risk: #7d7d7a;
       --radius: 14px;
     }
 
@@ -29,15 +31,15 @@
       font-family: "IBM Plex Sans", sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at 0% 0%, #ffffff 0%, #f4f4f2 34%),
-        linear-gradient(180deg, #f7f7f5 0%, #f1f1ef 100%);
+        radial-gradient(circle at 0% 0%, #ffffff 0%, #f4f4f2 35%),
+        linear-gradient(180deg, #f8f8f6 0%, #f1f1ef 100%);
       min-height: 100vh;
     }
 
-    .wrap {
-      max-width: 1260px;
+    .app {
+      max-width: 1320px;
       margin: 0 auto;
-      padding: 26px 18px 34px;
+      padding: 22px 16px 30px;
     }
 
     .top {
@@ -45,7 +47,7 @@
       grid-template-columns: 1fr auto;
       gap: 10px;
       align-items: end;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     h1 {
@@ -56,75 +58,105 @@
 
     .sub {
       margin: 0;
-      color: var(--muted);
       font-size: 14px;
-    }
-
-    .controls {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+      color: var(--muted);
     }
 
     .btn {
       border: 1px solid var(--line-strong);
+      border-radius: 999px;
       background: #fff;
       color: var(--ink);
+      padding: 8px 13px;
       font: inherit;
       font-size: 13px;
-      border-radius: 999px;
-      padding: 8px 12px;
       cursor: pointer;
-      transition: .2s ease;
     }
 
-    .btn:hover { transform: translateY(-1px); background: #fefefe; }
-
-    .btn.active {
-      background: #151515;
-      color: #fff;
-      border-color: #151515;
-    }
+    .btn:hover { background: #fefefe; }
 
     .card {
-      background: rgba(251, 251, 250, 0.9);
+      background: rgba(251, 251, 250, 0.92);
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      padding: 14px;
+      padding: 13px;
     }
 
     .goal {
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       display: grid;
       gap: 6px;
     }
 
     .label {
-      font-size: 12px;
+      color: var(--muted);
       text-transform: uppercase;
       letter-spacing: .08em;
-      color: var(--muted);
+      font-size: 12px;
     }
 
     .goal strong { font-size: 16px; font-weight: 600; }
 
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 10px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 7px 11px;
+      white-space: nowrap;
+      font-size: 13px;
+      cursor: pointer;
+      color: #2f2f2f;
+    }
+
+    .tab.active {
+      background: #151515;
+      color: #fff;
+      border-color: #151515;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    select, input {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 9px 10px;
+      font: inherit;
+      font-size: 13px;
+    }
+
     .kpis {
       display: grid;
       grid-template-columns: repeat(5, minmax(150px, 1fr));
-      gap: 10px;
-      margin-bottom: 12px;
+      gap: 8px;
+      margin-bottom: 10px;
     }
 
     .kpi-name { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-    .kpi-val { font-size: 24px; font-weight: 700; margin-bottom: 4px; line-height: 1.1; }
+    .kpi-value { font-size: 23px; line-height: 1.1; font-weight: 700; margin-bottom: 4px; }
     .kpi-foot { font-size: 12px; color: var(--muted); }
 
-    .grid-2 {
+    .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 12px;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 8px;
+      margin-bottom: 10px;
     }
 
     .section-title {
@@ -133,594 +165,486 @@
       font-weight: 600;
     }
 
-    .abc-bar {
-      height: 24px;
-      border-radius: 999px;
-      overflow: hidden;
-      border: 1px solid var(--line);
-      display: flex;
-      margin-bottom: 10px;
-      background: #f1f1ef;
-    }
-
-    .abc-bar > div {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      color: #fff;
-      min-width: 28px;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
-    .bar-a { background: var(--a); }
-    .bar-b { background: var(--b); }
-    .bar-c { background: var(--c); color: #111 !important; }
-
-    .abc-stats {
+    .decision-grid {
       display: grid;
-      gap: 7px;
-      font-size: 13px;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      gap: 8px;
     }
 
-    .abc-row {
-      display: grid;
-      grid-template-columns: 20px 1fr auto;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: 1px solid #00000020;
-      display: inline-block;
-    }
-
-    .list {
-      display: grid;
-      gap: 7px;
-    }
-
-    .list-row {
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 9px;
-      align-items: center;
-      font-size: 13px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 8px 10px;
-      background: #fff;
-    }
-
-    .chip {
-      background: var(--chip);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 3px 8px;
-      font-size: 11px;
-      color: #2f2f2f;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-    }
-
-    .chip-a { background: #ececec; }
-    .chip-b { background: #f3f3f3; }
-    .chip-c { background: #f1f1ef; color: #555; }
-    .chip-keep { background: #e9e9e9; }
-    .chip-rework { background: #efefef; }
-    .chip-test { background: #f2f2f0; }
-    .chip-remove { background: #e5e5e3; color: #202020; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      background: #fff;
+    .decision-col {
       border: 1px solid var(--line);
       border-radius: 12px;
-      overflow: hidden;
-      display: block;
+      padding: 10px;
+      background: #fff;
     }
+
+    .decision-col h4 {
+      margin: 0 0 8px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--muted);
+    }
+
+    .decision-list {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .decision-list li { line-height: 1.35; }
+
+    .no-sales {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      max-height: 220px;
+      overflow: auto;
+    }
+
     .table-wrap {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       border-radius: 12px;
     }
-    .table-wrap table {
-      min-width: 980px;
-    }
 
-    thead, tbody, tr {
+    table {
       width: 100%;
-      display: table;
-      table-layout: fixed;
-    }
-
-    thead {
-      border-bottom: 1px solid var(--line);
-      background: #f8f8f6;
+      min-width: 1080px;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 13px;
     }
 
     th, td {
-      padding: 9px 8px;
+      padding: 8px;
       text-align: left;
-      border-bottom: 1px solid #efefed;
+      border-bottom: 1px solid #ededea;
       vertical-align: middle;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #f8f8f6;
+      z-index: 1;
+      font-weight: 600;
     }
 
     tbody tr:last-child td { border-bottom: none; }
 
     .mono { font-variant-numeric: tabular-nums; }
-    .muted { color: var(--muted); }
 
-    .abc-cell {
+    .abc {
       font-size: 11px;
       border-radius: 999px;
-      padding: 3px 8px;
       border: 1px solid var(--line);
+      padding: 2px 7px;
       display: inline-block;
-      min-width: 28px;
+      min-width: 24px;
       text-align: center;
       font-weight: 600;
     }
 
     .abc-a { background: #ececec; }
-    .abc-b { background: #f4f4f4; }
-    .abc-c { background: #f1f1ef; color: #565656; }
-    .xyz {
-      font-size: 11px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 3px 7px;
-      display: inline-block;
-      margin-left: 4px;
-      color: #4a4a4a;
-      background: #fafaf9;
-    }
-    .decision-chip {
+    .abc-b { background: #f3f3f3; }
+    .abc-c { background: #f1f1ef; color: #555; }
+
+    .trend-up { color: var(--ok); }
+    .trend-down { color: var(--risk); }
+    .trend-flat { color: var(--warn); }
+
+    .decision {
       font-size: 11px;
       border: 1px solid var(--line);
       border-radius: 999px;
       padding: 3px 8px;
       display: inline-block;
-      font-weight: 600;
-      letter-spacing: .03em;
       text-transform: uppercase;
-    }
-    .decision-keep { background: #ececec; }
-    .decision-rework { background: #f2f2f2; }
-    .decision-test { background: #f3f3f1; color: #454545; }
-    .decision-remove { background: #e7e7e5; color: #232323; }
-    tbody tr.zero-sales td {
-      background: #fafaf8;
+      letter-spacing: .05em;
+      font-weight: 600;
     }
 
-    .rec {
-      font-size: 12px;
-      color: #343434;
-    }
+    .d-keep { background: #ececec; }
+    .d-rework { background: #f2f2f2; }
+    .d-test { background: #f3f3f1; color: #474747; }
+    .d-remove { background: #e6e6e4; color: #252525; }
 
     .footer {
-      margin-top: 10px;
-      color: var(--muted);
+      margin-top: 9px;
       font-size: 12px;
+      color: var(--muted);
     }
 
-    @media (max-width: 1050px) {
-      .kpis { grid-template-columns: repeat(3, minmax(140px, 1fr)); }
+    @media (max-width: 1080px) {
+      .kpis { grid-template-columns: repeat(3, minmax(150px, 1fr)); }
+      .grid { grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 860px) {
-      .grid-2 { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 700px) {
+    @media (max-width: 720px) {
       .top { grid-template-columns: 1fr; }
-      .controls { justify-content: flex-start; }
-      .kpis { grid-template-columns: repeat(2, minmax(135px, 1fr)); }
-      table { font-size: 12px; }
+      .toolbar { grid-template-columns: 1fr; }
+      .kpis { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+      .decision-grid { grid-template-columns: 1fr; }
     }
-    @media (max-width: 520px) {
+
+    @media (max-width: 500px) {
       .kpis { grid-template-columns: 1fr; }
-      .btn { padding: 7px 10px; font-size: 12px; }
-      .section-title { font-size: 13px; }
-      .table-wrap { margin: 0 -4px; }
+      .btn { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="app">
     <section class="top">
       <div>
-        <h1>ABC-анализ блюд</h1>
-        <p class="sub" id="meta"></p>
+        <h1>ABC-анализ iiko: управленческий отчет</h1>
+        <p class="sub" id="metaLine">Загрузка реальных данных...</p>
       </div>
-      <div class="controls">
-        <button class="btn active" data-period="day" type="button">День</button>
-        <button class="btn" data-period="week" type="button">Неделя</button>
-        <button class="btn" data-period="month" type="button">Месяц</button>
-        <button class="btn" id="refresh" type="button">Обновить демо</button>
-      </div>
+      <button class="btn" id="reloadBtn" type="button">Обновить отображение</button>
     </section>
 
     <section class="card goal">
-      <span class="label">Главная задача отчета</span>
-      <strong>Принимать решения по меню без просадки выручки: учитывать выручку, валовую прибыль, нулевые продажи и риск замещения при выводе блюда.</strong>
+      <span class="label">Фокус</span>
+      <strong>Не просто смотреть ABC-классы, а сразу видеть управленческие действия: что защищать, что дорабатывать, что тестово выводить.</strong>
     </section>
 
-    <section class="kpis" id="kpis"></section>
+    <div class="tabs" id="locationTabs"></div>
 
-    <section class="grid-2">
+    <section class="toolbar">
+      <select id="periodSelect"></select>
+      <select id="decisionFilter">
+        <option value="all">Все решения</option>
+        <option value="keep">Только защитить</option>
+        <option value="rework">Только доработать</option>
+        <option value="test">Только тест</option>
+        <option value="remove">Только выводить</option>
+      </select>
+      <input id="searchInput" type="text" placeholder="Поиск по блюду или группе" />
+    </section>
+
+    <section class="kpis" id="kpiGrid"></section>
+
+    <section class="grid">
       <article class="card">
-        <h2 class="section-title">Вклад классов A/B/C в выручку</h2>
-        <div class="abc-bar">
-          <div class="bar-a" id="barA"></div>
-          <div class="bar-b" id="barB"></div>
-          <div class="bar-c" id="barC"></div>
+        <h2 class="section-title">Ключевые управленческие решения</h2>
+        <div class="decision-grid">
+          <div class="decision-col">
+            <h4>Защитить</h4>
+            <ul class="decision-list" id="keepList"></ul>
+          </div>
+          <div class="decision-col">
+            <h4>Доработать</h4>
+            <ul class="decision-list" id="reworkList"></ul>
+          </div>
+          <div class="decision-col">
+            <h4>Тест / Вывод</h4>
+            <ul class="decision-list" id="removeList"></ul>
+          </div>
         </div>
-        <div class="abc-stats" id="abcStats"></div>
       </article>
 
       <article class="card">
-        <h2 class="section-title">Решения на период</h2>
-        <div class="list" id="leaderList"></div>
+        <h2 class="section-title">Нет продаж в текущем периоде</h2>
+        <ul class="no-sales" id="noSalesList"></ul>
       </article>
     </section>
 
     <section class="card">
-      <h2 class="section-title">Детализация по блюдам</h2>
-      <div class="sub" style="margin-bottom:8px">На мобильных таблица скроллится по горизонтали.</div>
+      <h2 class="section-title">Детализация позиций</h2>
+      <div class="sub" id="dataCoverageNote" style="margin-bottom:8px"></div>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th style="width:16%">Блюдо</th>
-              <th style="width:10%">Роль</th>
-              <th style="width:8%">Порции</th>
-              <th style="width:11%">Выручка</th>
-              <th style="width:11%">Валовая прибыль</th>
-              <th style="width:8%">ABC/XYZ</th>
-              <th style="width:8%">R замещ.</th>
-              <th style="width:10%">Потеря маржи</th>
-              <th style="width:8%">Net</th>
-              <th style="width:10%">Решение</th>
+              <th style="width:18%">Блюдо</th>
+              <th style="width:12%">Группа</th>
+              <th style="width:7%">Q</th>
+              <th style="width:7%">R</th>
+              <th style="width:7%">P</th>
+              <th style="width:10%">Тренд R/P</th>
+              <th style="width:8%">Фудкост</th>
+              <th style="width:10%">Себестоим., ₽</th>
+              <th style="width:10%">Оценка выручки, ₽</th>
+              <th style="width:8%">Решение</th>
+              <th style="width:23%">Комментарий</th>
             </tr>
           </thead>
-          <tbody id="tbody"></tbody>
+          <tbody id="tableBody"></tbody>
         </table>
       </div>
     </section>
 
-    <div class="footer">Демо-макет: показатели рассчитаны на сгенерированных данных, без подключения к API.</div>
+    <div class="footer">Источник: реальная выгрузка iiko ABC (`ABC.xlsx`). Если для точки нет сумм, это ограничение структуры выгрузки (доступны ABC-классы, но не абсолютная выручка).</div>
   </div>
 
   <script>
-    const dishes = [
-      { name: "Паста Карбонара", price: 540, cost: 190, popularity: 0.95, role: "traffic", prepMin: 14, complexity: 2 },
-      { name: "Борщ", price: 390, cost: 120, popularity: 0.72, role: "regular", prepMin: 8, complexity: 1 },
-      { name: "Том Ям", price: 620, cost: 210, popularity: 0.82, role: "image", prepMin: 16, complexity: 3 },
-      { name: "Цезарь с курицей", price: 490, cost: 165, popularity: 0.9, role: "traffic", prepMin: 9, complexity: 1 },
-      { name: "Ризотто с грибами", price: 560, cost: 235, popularity: 0.55, role: "regular", prepMin: 19, complexity: 3 },
-      { name: "Стейк рибай", price: 1490, cost: 780, popularity: 0.42, role: "margin", prepMin: 21, complexity: 4 },
-      { name: "Бургер фирменный", price: 610, cost: 255, popularity: 0.86, role: "traffic", prepMin: 11, complexity: 2 },
-      { name: "Пицца Маргарита", price: 520, cost: 175, popularity: 0.88, role: "traffic", prepMin: 13, complexity: 2 },
-      { name: "Поке с лососем", price: 670, cost: 290, popularity: 0.58, role: "image", prepMin: 12, complexity: 3 },
-      { name: "Сырники", price: 360, cost: 110, popularity: 0.67, role: "attach", prepMin: 10, complexity: 2 },
-      { name: "Чизкейк", price: 340, cost: 100, popularity: 0.64, role: "attach", prepMin: 4, complexity: 1 },
-      { name: "Лимонад домашний", price: 280, cost: 75, popularity: 0.92, role: "attach", prepMin: 3, complexity: 1 },
-      { name: "Кофе капучино", price: 250, cost: 65, popularity: 0.98, role: "attach", prepMin: 2, complexity: 1 },
-      { name: "Филе судака", price: 830, cost: 360, popularity: 0.35, role: "margin", prepMin: 18, complexity: 4 }
-    ];
+    const SCORE = { A: 3, B: 2, C: 1, null: 0, undefined: 0 };
 
-    const roleName = {
-      traffic: "Трафик",
-      margin: "Маржа",
-      image: "Имидж",
-      attach: "Апселл",
-      regular: "База"
+    const state = {
+      data: null,
+      locationIdx: 0,
+      periodIdx: 0,
+      filter: "all",
+      search: "",
     };
-
-    const multipliers = { day: 1, week: 6.7, month: 28 };
-    const periodText = { day: "Ежедневный срез", week: "Еженедельный срез", month: "Ежемесячный срез" };
-
-    let seed = Math.floor(Date.now() / 1000);
-    const dataset = {};
-    let currentPeriod = "day";
-
-    function rngFactory(s) {
-      let t = s % 2147483647;
-      return () => (t = (t * 16807) % 2147483647) / 2147483647;
-    }
-
-    function fmtMoney(v) {
-      return new Intl.NumberFormat("ru-RU").format(Math.round(v)) + " ₽";
-    }
-
-    function fmtSignedMoney(v) {
-      const sign = v >= 0 ? "+" : "-";
-      return sign + " " + fmtMoney(Math.abs(v));
-    }
 
     function fmtInt(v) {
       return new Intl.NumberFormat("ru-RU").format(Math.round(v));
     }
 
+    function fmtMoney(v) {
+      if (v === null || v === undefined || Number.isNaN(v)) return "—";
+      return new Intl.NumberFormat("ru-RU").format(Math.round(v)) + " ₽";
+    }
+
     function fmtPct(v) {
-      return v.toFixed(1).replace(".", ",") + "%";
+      if (v === null || v === undefined || Number.isNaN(v)) return "—";
+      return (v * 100).toFixed(1).replace(".", ",") + "%";
     }
 
-    function clamp(v, min, max) {
-      return Math.max(min, Math.min(max, v));
+    function abcBadge(v) {
+      if (!v) return "<span class='abc'>—</span>";
+      return `<span class="abc abc-${v.toLowerCase()}">${v}</span>`;
     }
 
-    function substitutionRate(row) {
-      const roleBase = { traffic: 0.42, margin: 0.68, image: 0.3, attach: 0.82, regular: 0.6 };
-      const abcAdj = { A: -0.08, B: 0, C: 0.12 };
-      const xyzAdj = { X: -0.08, Y: 0, Z: 0.1 };
-      const zeroAdj = row.qty === 0 ? 0.08 : 0;
-      return clamp(roleBase[row.role] + abcAdj[row.abc] + xyzAdj[row.xyz] + zeroAdj, 0.15, 0.95);
+    function trendSymbol(delta) {
+      if (delta > 0) return `<span class="trend-up">↑ ${delta}</span>`;
+      if (delta < 0) return `<span class="trend-down">↓ ${Math.abs(delta)}</span>`;
+      return `<span class="trend-flat">→ 0</span>`;
     }
 
-    function actionLabel(action) {
+    function decisionLabel(action) {
       if (action === "keep") return "Защитить";
       if (action === "rework") return "Доработать";
       if (action === "test") return "Тест";
       return "Выводить";
     }
 
-    function actionClass(action) {
-      if (action === "keep") return "decision-keep";
-      if (action === "rework") return "decision-rework";
-      if (action === "test") return "decision-test";
-      return "decision-remove";
+    function decisionClass(action) {
+      if (action === "keep") return "d-keep";
+      if (action === "rework") return "d-rework";
+      if (action === "test") return "d-test";
+      return "d-remove";
     }
 
-    function recommendation(row) {
-      if (row.action === "keep") return "Ядро меню: не выводить, контролировать качество и стоп-лист.";
-      if (row.action === "rework") return "Пересобрать: фудкост, цену, граммовку или подачу.";
-      if (row.action === "test") return "Soft-remove на 2 недели, проверить замещение и чек.";
-      return "Можно выводить: низкий риск, положительный net-эффект.";
-    }
-
-    function genPeriod(period, periodSeed) {
-      const rnd = rngFactory(periodSeed);
-      const mult = multipliers[period];
-
-      const rows = dishes.map(d => {
-        const noise = 0.84 + rnd() * 0.42;
-        const baseQty = (7 + d.popularity * 25) * noise * mult;
-        const zeroProbBase = period === "day" ? 0.24 : period === "week" ? 0.12 : 0.05;
-        const zeroProb = clamp(zeroProbBase - d.popularity * 0.16 + d.complexity * 0.03, 0.01, 0.35);
-        const qty = rnd() < zeroProb ? 0 : Math.max(1, Math.round(baseQty));
-        const revenue = qty * d.price;
-        const cost = qty * d.cost;
-        const profit = revenue - cost;
-        const marginPct = revenue > 0 ? (profit / revenue) * 100 : 0;
-        return { ...d, qty, revenue, cost, profit, marginPct };
-      });
-
-      rows.sort((a, b) => b.revenue - a.revenue);
-
-      const totalRevenue = rows.reduce((s, r) => s + r.revenue, 0);
-      const totalQty = rows.reduce((s, r) => s + r.qty, 0);
-      const totalProfit = rows.reduce((s, r) => s + r.profit, 0);
-      const positiveQty = rows.filter(r => r.qty > 0).map(r => r.qty).sort((a, b) => a - b);
-      const medianQty = positiveQty.length ? positiveQty[Math.floor(positiveQty.length / 2)] : 0;
-      const xThreshold = positiveQty.length ? positiveQty[Math.floor(positiveQty.length * 0.66)] : 0;
-      const yThreshold = positiveQty.length ? positiveQty[Math.floor(positiveQty.length * 0.33)] : 0;
-
-      let cumulative = 0;
-      for (const r of rows) {
-        r.share = totalRevenue > 0 ? (r.revenue / totalRevenue) * 100 : 0;
-        cumulative += r.share;
-        r.cumShare = cumulative;
-        r.abc = cumulative <= 80 ? "A" : cumulative <= 95 ? "B" : "C";
-        r.xyz = r.qty === 0 ? "Z" : r.qty >= xThreshold ? "X" : r.qty >= yThreshold ? "Y" : "Z";
-        r.medianQty = medianQty;
+    async function loadData() {
+      const urls = ["./abc_data.json", "./dashboards/menu-abc/abc_data.json"];
+      for (const url of urls) {
+        try {
+          const res = await fetch(url, { cache: "no-store" });
+          if (res.ok) return await res.json();
+        } catch (_) {}
       }
+      throw new Error("Не удалось загрузить abc_data.json");
+    }
 
-      for (const r of rows) {
-        r.substitutionRate = substitutionRate(r);
-        r.expectedMarginLoss = r.profit * (1 - r.substitutionRate);
-        const simplificationGainRaw = (r.prepMin * 120 + r.complexity * 850);
-        const simplificationScale = r.qty === 0 ? 1.2 : r.qty < r.medianQty ? 0.8 : 0.3;
-        r.simplificationGain = simplificationGainRaw * simplificationScale;
-        r.netEffect = r.simplificationGain - r.expectedMarginLoss;
+    function enrichRows(location, periodIdx) {
+      const cur = location.blocks[periodIdx];
+      const prev = periodIdx > 0 ? location.blocks[periodIdx - 1] : null;
+      const prevMap = new Map((prev ? prev.items : []).map(i => [i.name, i]));
 
-        const protectedRole = r.role === "traffic" || r.role === "image";
-        if (protectedRole && (r.abc === "A" || r.xyz === "X")) {
-          r.action = "keep";
-        } else if (r.qty === 0 && !protectedRole && r.netEffect > 0) {
-          r.action = "remove";
-        } else if (r.abc === "C" && r.xyz === "Z" && !protectedRole && r.netEffect > 0) {
-          r.action = "remove";
-        } else if ((r.abc === "C" && r.xyz !== "X") || r.netEffect < -2500) {
-          r.action = "test";
-        } else if (r.marginPct < 53 || (r.abc === "B" && r.marginPct < 56)) {
-          r.action = "rework";
-        } else {
-          r.action = "keep";
+      const rows = cur.items.map(item => {
+        const prevItem = prevMap.get(item.name);
+        const q = SCORE[item.abc_qty];
+        const r = SCORE[item.abc_revenue];
+        const p = SCORE[item.abc_profit];
+        const prevR = prevItem ? SCORE[prevItem.abc_revenue] : 0;
+        const prevP = prevItem ? SCORE[prevItem.abc_profit] : 0;
+        const deltaR = r - prevR;
+        const deltaP = p - prevP;
+
+        const estRevenue = item.foodcost && item.cost_total ? item.cost_total / item.foodcost : null;
+
+        let action = "test";
+        let reason = "Нужен контроль динамики по периодам.";
+
+        if (r >= 2 && p >= 2 && q >= 2 && !(deltaR < 0 && deltaP < 0)) {
+          action = "keep";
+          reason = "Сильная позиция: стабильна по выручке и прибыли.";
+        } else if (r >= 2 && p === 1) {
+          action = "rework";
+          reason = "Хороший спрос, но слабая прибыльность: пересобрать фудкост/цену.";
+        } else if (r === 1 && p === 1 && q === 1 && deltaR <= 0 && deltaP <= 0) {
+          action = "remove";
+          reason = "Стабильно слабая позиция по всем ABC-метрикам.";
+        } else if (deltaR < 0 && deltaP < 0) {
+          action = "test";
+          reason = "Негативный тренд: запустить тест/ограниченный вывод.";
+        } else if (r === 1 && p <= 2) {
+          action = "test";
+          reason = "Низкая выручка: проверить роль в меню и канал продаж.";
         }
 
-        r.rec = recommendation(r);
-      }
+        const scoreSum = q + r + p;
 
-      const byClass = rows.reduce((acc, r) => {
-        acc[r.abc].revenue += r.revenue;
-        acc[r.abc].qty += r.qty;
-        acc[r.abc].count += 1;
-        acc[r.abc].profit += r.profit;
-        return acc;
-      }, {
-        A: { revenue: 0, qty: 0, count: 0, profit: 0 },
-        B: { revenue: 0, qty: 0, count: 0, profit: 0 },
-        C: { revenue: 0, qty: 0, count: 0, profit: 0 }
+        return {
+          ...item,
+          deltaR,
+          deltaP,
+          action,
+          reason,
+          scoreSum,
+          estRevenue,
+        };
       });
 
-      const classShare = {
-        A: totalRevenue ? (byClass.A.revenue / totalRevenue) * 100 : 0,
-        B: totalRevenue ? (byClass.B.revenue / totalRevenue) * 100 : 0,
-        C: totalRevenue ? (byClass.C.revenue / totalRevenue) * 100 : 0
-      };
+      const curSet = new Set(cur.items.map(i => i.name));
+      const noSales = (prev ? prev.items : []).filter(i => !curSet.has(i.name));
 
-      const zeroSalesCount = rows.filter(r => r.qty === 0).length;
-      const removeCandidates = rows.filter(r => r.action === "remove");
-      const riskyCandidates = rows.filter(r => r.action === "test");
-      const protectedCore = rows.filter(r => r.action === "keep" && (r.role === "traffic" || r.role === "image"));
-      const removalLossRisk = removeCandidates.reduce((s, r) => s + r.expectedMarginLoss, 0);
-      const removalNetGain = removeCandidates.reduce((s, r) => s + r.netEffect, 0);
+      return { rows, noSales, cur, prev };
+    }
 
-      return {
-        rows,
-        byClass,
-        classShare,
-        totalRevenue,
-        totalQty,
-        totalProfit,
-        zeroSalesCount,
-        removeCandidates,
-        riskyCandidates,
-        protectedCore,
-        removalLossRisk,
-        removalNetGain
+    function renderTabs() {
+      const tabs = document.getElementById("locationTabs");
+      tabs.innerHTML = state.data.locations.map((loc, idx) =>
+        `<button class="tab ${idx === state.locationIdx ? "active" : ""}" data-idx="${idx}" type="button">${loc.name}</button>`
+      ).join("");
+
+      tabs.querySelectorAll(".tab").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.locationIdx = Number(btn.dataset.idx);
+          state.periodIdx = state.data.locations[state.locationIdx].blocks.length - 1;
+          render();
+        });
+      });
+    }
+
+    function renderPeriodSelect() {
+      const location = state.data.locations[state.locationIdx];
+      const select = document.getElementById("periodSelect");
+      select.innerHTML = location.blocks.map((b, idx) =>
+        `<option value="${idx}" ${idx === state.periodIdx ? "selected" : ""}>${b.period}</option>`
+      ).join("");
+
+      select.onchange = () => {
+        state.periodIdx = Number(select.value);
+        render();
       };
     }
 
-    function regenerateData() {
-      dataset.day = genPeriod("day", seed + 11);
-      dataset.week = genPeriod("week", seed + 29);
-      dataset.month = genPeriod("month", seed + 53);
-    }
+    function render() {
+      const location = state.data.locations[state.locationIdx];
+      if (state.periodIdx >= location.blocks.length) state.periodIdx = location.blocks.length - 1;
 
-    function render(period) {
-      currentPeriod = period;
-      const data = dataset[period];
-      const now = new Date();
-      document.getElementById("meta").textContent =
-        `${periodText[period]} • ${now.toLocaleDateString("ru-RU", { day: "2-digit", month: "long", year: "numeric" })}`;
+      renderTabs();
+      renderPeriodSelect();
 
-      const avgMargin = data.totalRevenue ? (data.totalProfit / data.totalRevenue) * 100 : 0;
-      const kpiData = [
-        { name: "Выручка", value: fmtMoney(data.totalRevenue), foot: "по блюдам за период" },
-        { name: "Валовая прибыль", value: fmtMoney(data.totalProfit), foot: `средняя маржа ${fmtPct(avgMargin)}` },
-        { name: "Нулевые продажи", value: fmtInt(data.zeroSalesCount), foot: "блюд без продаж в периоде" },
-        { name: "Можно выводить", value: fmtInt(data.removeCandidates.length), foot: `ожидаемая потеря маржи ${fmtMoney(data.removalLossRisk)}` },
-        { name: "Net-эффект вывода", value: fmtSignedMoney(data.removalNetGain), foot: "упрощение кухни минус риск потери" }
-      ];
+      const { rows, noSales, cur } = enrichRows(location, state.periodIdx);
+      const total = rows.length;
+      const core = rows.filter(r => r.action === "keep").length;
+      const rework = rows.filter(r => r.action === "rework").length;
+      const remove = rows.filter(r => r.action === "remove").length;
+      const risk = rows.filter(r => r.abc_revenue === "C" && r.abc_profit === "C").length;
 
-      document.getElementById("kpis").innerHTML = kpiData.map(k => `
+      const hasNumbers = rows.some(r => r.foodcost !== null || r.cost_total !== null || r.estRevenue !== null);
+      document.getElementById("dataCoverageNote").textContent = hasNumbers
+        ? "Для этой точки доступны фудкост/себестоимость, показана расчетная оценка выручки."
+        : "Для этой точки в выгрузке есть только ABC-классы (без абсолютной выручки и прибыли).";
+
+      document.getElementById("metaLine").textContent =
+        `${location.name} • ${cur.period} • позиций: ${fmtInt(total)}`;
+
+      document.getElementById("kpiGrid").innerHTML = [
+        { n: "Позиции в периоде", v: fmtInt(total), f: "в текущем срезе" },
+        { n: "Защитить", v: fmtInt(core), f: "стабильное ядро" },
+        { n: "Доработать", v: fmtInt(rework), f: "спрос есть, прибыль проседает" },
+        { n: "Выводить", v: fmtInt(remove), f: "кандидаты на вывод" },
+        { n: "Зона риска C/C", v: fmtInt(risk), f: "выручка и прибыль в C" },
+      ].map(k => `
         <article class="card">
-          <div class="kpi-name">${k.name}</div>
-          <div class="kpi-val">${k.value}</div>
-          <div class="kpi-foot">${k.foot}</div>
+          <div class="kpi-name">${k.n}</div>
+          <div class="kpi-value">${k.v}</div>
+          <div class="kpi-foot">${k.f}</div>
         </article>
       `).join("");
 
-      const aW = Math.max(6, data.classShare.A);
-      const bW = Math.max(6, data.classShare.B);
-      const cW = Math.max(6, data.classShare.C);
-      const sumW = aW + bW + cW;
-      document.getElementById("barA").style.width = (aW / sumW) * 100 + "%";
-      document.getElementById("barB").style.width = (bW / sumW) * 100 + "%";
-      document.getElementById("barC").style.width = (cW / sumW) * 100 + "%";
-      document.getElementById("barA").textContent = `A ${fmtPct(data.classShare.A)}`;
-      document.getElementById("barB").textContent = `B ${fmtPct(data.classShare.B)}`;
-      document.getElementById("barC").textContent = `C ${fmtPct(data.classShare.C)}`;
+      const keepTop = rows.filter(r => r.action === "keep").sort((a,b)=>b.scoreSum-a.scoreSum).slice(0,7);
+      const reworkTop = rows.filter(r => r.action === "rework").sort((a,b)=>SCORE[b.abc_revenue]-SCORE[a.abc_revenue]).slice(0,7);
+      const removeTop = rows.filter(r => r.action === "remove" || r.action === "test").sort((a,b)=>a.scoreSum-b.scoreSum).slice(0,7);
 
-      document.getElementById("abcStats").innerHTML = [
-        { cls: "A", color: "#1e1e1e", text: `${data.byClass.A.count} блюд • ${fmtMoney(data.byClass.A.revenue)} выручки • ${fmtMoney(data.byClass.A.profit)} прибыли` },
-        { cls: "B", color: "#555555", text: `${data.byClass.B.count} блюд • ${fmtMoney(data.byClass.B.revenue)} выручки • ${fmtMoney(data.byClass.B.profit)} прибыли` },
-        { cls: "C", color: "#9a9a97", text: `${data.byClass.C.count} блюд • ${fmtMoney(data.byClass.C.revenue)} выручки • ${fmtMoney(data.byClass.C.profit)} прибыли` }
-      ].map(row => `
-        <div class="abc-row">
-          <span class="dot" style="background:${row.color}"></span>
-          <span>${row.text}</span>
-          <span class="muted">${row.cls}</span>
-        </div>
-      `).join("");
+      const fillList = (id, items, formatter) => {
+        const el = document.getElementById(id);
+        if (!items.length) {
+          el.innerHTML = "<li>Нет позиций в этой категории.</li>";
+          return;
+        }
+        el.innerHTML = items.map(formatter).join("");
+      };
 
-      const keepSample = data.protectedCore.slice(0, 2);
-      const reworkSample = data.rows.filter(r => r.action === "rework").slice(0, 2);
-      const removeSample = data.removeCandidates.slice(0, 2);
-      const decisionRows = [];
+      fillList("keepList", keepTop, r => `<li>${r.name} (${r.abc_revenue}/${r.abc_profit})</li>`);
+      fillList("reworkList", reworkTop, r => `<li>${r.name} (${r.abc_revenue}/${r.abc_profit})</li>`);
+      fillList("removeList", removeTop, r => `<li>${r.name} (${decisionLabel(r.action)})</li>`);
 
-      for (const r of keepSample) {
-        decisionRows.push(`
-          <div class="list-row">
-            <span>${r.name}</span>
-            <span class="chip chip-keep">защитить</span>
-            <span class="mono">${fmtMoney(r.revenue)}</span>
-          </div>
-        `);
+      const ns = document.getElementById("noSalesList");
+      if (!noSales.length) {
+        ns.innerHTML = "<li>Относительно предыдущего периода выпадений нет.</li>";
+      } else {
+        ns.innerHTML = noSales.slice(0, 40).map(i =>
+          `<li>${i.name} <span class="sub">(${i.abc_revenue || "—"}/${i.abc_profit || "—"} в прошлом периоде)</span></li>`
+        ).join("");
       }
-      for (const r of reworkSample) {
-        decisionRows.push(`
-          <div class="list-row">
-            <span>${r.name}</span>
-            <span class="chip chip-rework">доработать</span>
-            <span class="mono">${fmtPct(r.marginPct)}</span>
-          </div>
-        `);
-      }
-      for (const r of removeSample) {
-        decisionRows.push(`
-          <div class="list-row">
-            <span>${r.name}</span>
-            <span class="chip chip-remove">выводить</span>
-            <span class="mono">${fmtSignedMoney(r.netEffect)}</span>
-          </div>
-        `);
-      }
-      if (!decisionRows.length) {
-        decisionRows.push(`
-          <div class="list-row">
-            <span>Нет безопасных кандидатов к выводу</span>
-            <span class="chip chip-b">контроль</span>
-            <span class="mono">—</span>
-          </div>
-        `);
-      }
-      document.getElementById("leaderList").innerHTML = decisionRows.join("");
 
-      document.getElementById("tbody").innerHTML = data.rows.map(r => `
-        <tr class="${r.qty === 0 ? "zero-sales" : ""}">
+      const filtered = rows.filter(r => {
+        if (state.filter !== "all" && r.action !== state.filter) return false;
+        if (state.search) {
+          const q = state.search.toLowerCase();
+          const text = `${r.name} ${r.group}`.toLowerCase();
+          if (!text.includes(q)) return false;
+        }
+        return true;
+      }).sort((a,b)=> (SCORE[b.abc_revenue]-SCORE[a.abc_revenue]) || (SCORE[b.abc_profit]-SCORE[a.abc_profit]));
+
+      document.getElementById("tableBody").innerHTML = filtered.map(r => `
+        <tr>
           <td>${r.name}</td>
-          <td>${roleName[r.role]}</td>
-          <td class="mono">${fmtInt(r.qty)}</td>
-          <td class="mono">${fmtMoney(r.revenue)}</td>
-          <td class="mono">${fmtMoney(r.profit)}</td>
-          <td>
-            <span class="abc-cell abc-${r.abc.toLowerCase()}">${r.abc}</span>
-            <span class="xyz">${r.xyz}</span>
-          </td>
-          <td class="mono">${fmtPct(r.substitutionRate * 100)}</td>
-          <td class="mono">${fmtMoney(r.expectedMarginLoss)}</td>
-          <td class="mono">${fmtSignedMoney(r.netEffect)}</td>
-          <td><span class="decision-chip ${actionClass(r.action)}">${actionLabel(r.action)}</span></td>
+          <td>${r.group || "—"}</td>
+          <td>${abcBadge(r.abc_qty)}</td>
+          <td>${abcBadge(r.abc_revenue)}</td>
+          <td>${abcBadge(r.abc_profit)}</td>
+          <td class="mono">${trendSymbol(r.deltaR)} / ${trendSymbol(r.deltaP)}</td>
+          <td class="mono">${fmtPct(r.foodcost)}</td>
+          <td class="mono">${fmtMoney(r.cost_total)}</td>
+          <td class="mono">${fmtMoney(r.estRevenue)}</td>
+          <td><span class="decision ${decisionClass(r.action)}">${decisionLabel(r.action)}</span></td>
+          <td>${r.reason}</td>
         </tr>
       `).join("");
-
-      document.querySelectorAll("[data-period]").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.period === period);
-      });
     }
 
-    document.querySelectorAll("[data-period]").forEach(btn => {
-      btn.addEventListener("click", () => render(btn.dataset.period));
-    });
+    async function init() {
+      try {
+        state.data = await loadData();
+        state.locationIdx = 0;
+        state.periodIdx = state.data.locations[0].blocks.length - 1;
 
-    document.getElementById("refresh").addEventListener("click", () => {
-      seed = Math.floor(Date.now() / 1000);
-      regenerateData();
-      render(currentPeriod);
-    });
+        document.getElementById("decisionFilter").addEventListener("change", (e) => {
+          state.filter = e.target.value;
+          render();
+        });
 
-    regenerateData();
-    render("day");
+        document.getElementById("searchInput").addEventListener("input", (e) => {
+          state.search = e.target.value.trim();
+          render();
+        });
+
+        document.getElementById("reloadBtn").addEventListener("click", () => render());
+
+        render();
+      } catch (err) {
+        document.getElementById("metaLine").textContent =
+          `Ошибка загрузки данных: ${err.message}. Для локального просмотра запустите сервер: python3 -m http.server`;
+      }
+    }
+
+    init();
   </script>
 </body>
 </html>
